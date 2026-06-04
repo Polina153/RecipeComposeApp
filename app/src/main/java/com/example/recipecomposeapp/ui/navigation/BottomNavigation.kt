@@ -3,6 +3,7 @@ package com.example.recipecomposeapp.ui.navigation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -18,7 +19,8 @@ fun BottomNavigation(onCategoriesClick: () -> Unit, onFavoriteClick: () -> Unit)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .navigationBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
 
     ) {

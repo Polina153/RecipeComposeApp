@@ -53,7 +53,6 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = "Категории",
-            modifier = modifier,
             style = MaterialTheme.typography.headlineMedium
         )
     }
@@ -67,7 +66,6 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = "Избранное",
-            modifier = modifier,
             style = MaterialTheme.typography.headlineMedium
         )
     }
