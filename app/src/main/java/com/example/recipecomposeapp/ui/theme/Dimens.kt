@@ -14,6 +14,9 @@ object Dimens {
     val paddingXLarge = 32.dp
 
     // === ВЫСОТЫ ЭЛЕМЕНТОВ ===
+
+    val headerHeight = 220.dp
+
     val heightSmallButton = 36.dp
     val heightMediumButton = 48.dp
     val heightLargeButton = 56.dp
