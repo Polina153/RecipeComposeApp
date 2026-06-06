@@ -15,7 +15,7 @@ object Dimens {
 
     // === ВЫСОТЫ ЭЛЕМЕНТОВ ===
 
-    val headerHeight = 220.dp
+    val headerHeight = 224.dp
 
     val heightSmallButton = 36.dp
     val heightMediumButton = 48.dp
