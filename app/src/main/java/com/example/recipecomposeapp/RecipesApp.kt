@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.recipecomposeapp.ui.categories.CategoriesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 
@@ -45,7 +46,7 @@ fun RecipesApp() {
     }
 }
 
-@Composable
+/*@Composable
 fun CategoriesScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -56,7 +57,7 @@ fun CategoriesScreen(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineMedium
         )
     }
-}
+}*/
 
 @Composable
 fun FavoritesScreen(modifier: Modifier = Modifier) {
