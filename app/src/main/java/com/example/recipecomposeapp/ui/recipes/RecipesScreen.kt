@@ -19,7 +19,7 @@ fun RecipesScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize()) {
         ScreenHeader(
             painterResource(id = R.drawable.recipe),
-            "Заголовок экрана ИРецепты",
+            "Заголовок экрана Рецепты",
             "Рецепты"
         )
         Text(

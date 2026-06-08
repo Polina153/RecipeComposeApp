@@ -48,7 +48,7 @@ fun BottomNavigation(
             onClick = { onRecipesClick() },
             modifier = Modifier.weight(1f),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
         ) {
             Text("Рецепты")
         }
