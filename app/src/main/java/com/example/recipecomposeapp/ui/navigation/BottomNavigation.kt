@@ -15,7 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottomNavigation(onCategoriesClick: () -> Unit, onFavoriteClick: () -> Unit) {
+fun BottomNavigation(
+    onCategoriesClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
+    onRecipesClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,11 +44,19 @@ fun BottomNavigation(onCategoriesClick: () -> Unit, onFavoriteClick: () -> Unit)
         ) {
             Text("Избранное")
         }
+        Button(
+            onClick = { onRecipesClick() },
+            modifier = Modifier.weight(1f),
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+        ) {
+            Text("Рецепты")
+        }
     }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun showBottomNavigation(){
-    BottomNavigation({ }, {})
+fun ShowBottomNavigation() {
+    BottomNavigation({ }, {}, {})
 }
