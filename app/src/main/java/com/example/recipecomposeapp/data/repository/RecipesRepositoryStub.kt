@@ -21,25 +21,25 @@ private val categories = listOf(
         id = 0,
         title = "Бургеры",
         description = "Рецепты всех популярных видов бургеров",
-        imageUrl = "burger.png"
+        imageUrl = "burger.jpg"
     ),
     CategoryDto(
         id = 1,
         title = "Десерты",
         description = "Самые вкусные рецепты десертов специально для вас",
-        imageUrl = "dessert.png"
+        imageUrl = "dessert.jpg"
     ),
     CategoryDto(
         id = 2,
         title = "Пицца",
         description = "Пицца на любой вкус и цвет. Лучшая подборка для тебя",
-        imageUrl = "pizza.png"
+        imageUrl = "pizza.jpg"
     ),
     CategoryDto(
         id = 3,
         title = "Рыба",
         description = "Печеная, жареная, сушеная, любая рыба на твой вкус",
-        imageUrl = "fish.png"
+        imageUrl = "fish.jpg"
     ),
     CategoryDto(
         id = 4,
