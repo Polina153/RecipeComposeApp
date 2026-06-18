@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.categories.model.CategoryUiModel
@@ -27,7 +26,8 @@ import com.example.recipecomposeapp.ui.theme.Dimens.paddingSmall
 @Composable
 fun CategoryItem(category: CategoryUiModel, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(cornerExtraLarge),
         elevation = CardDefaults.cardElevation(elevationMedium),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
@@ -43,7 +43,12 @@ fun CategoryItem(category: CategoryUiModel, onClick: () -> Unit, modifier: Modif
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1.2f)     // фиксированное соотношение сторон
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = cornerExtraLarge,
+                            topEnd = cornerExtraLarge
+                        )
+                    ),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(R.drawable.img_placeholder),
                 error = painterResource(R.drawable.img_error)

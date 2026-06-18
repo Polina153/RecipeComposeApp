@@ -40,7 +40,7 @@ fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int) -> Un
             horizontalArrangement = spacedBy(paddingMedium),
             verticalArrangement = spacedBy(paddingMedium)
         ) {
-            items(categories) { category ->
+            items(categories, key = { it.id }) { category ->
                 // 4. Используем компонент CategoryCard и передаем ему обработчик клика.
                 // CategoryCard должен принимать модель и лямбду onClick.
                 CategoryItem(category = category, onClick = { onCategoryClick(category.id) })
