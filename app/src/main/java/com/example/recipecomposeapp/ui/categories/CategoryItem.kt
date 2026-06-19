@@ -38,7 +38,7 @@ fun CategoryItem(category: CategoryUiModel, onClick: () -> Unit, modifier: Modif
                 .padding(paddingSmall)
         ) {
             AsyncImage(
-                model = category.imageUrl,           // ImageRequest, который берёт drawable по id из category.imageRes
+                model = category.imageUrl,
                 contentDescription = "Карточка категорий",
                 modifier = Modifier
                     .fillMaxWidth()
