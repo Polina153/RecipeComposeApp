@@ -21,7 +21,7 @@ import com.example.recipecomposeapp.ui.theme.Dimens.paddingSmallest
 
 
 @Composable
-fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int) -> Unit) {
+fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int, String) -> Unit) {
 
     val categories = remember { RecipesRepositoryStub.getCategories().map { it.toUiModel() } }
 
@@ -43,7 +43,7 @@ fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int) -> Un
             items(categories, key = { it.id }) { category ->
                 // 4. Используем компонент CategoryCard и передаем ему обработчик клика.
                 // CategoryCard должен принимать модель и лямбду onClick.
-                CategoryItem(category = category, onClick = { onCategoryClick(category.id) })
+                CategoryItem(category = category, onClick = { onCategoryClick(category.id, category.title) })
             }
         }
     }
