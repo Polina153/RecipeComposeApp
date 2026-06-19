@@ -18,7 +18,7 @@ import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.recipes.model.toUiModel
-import com.example.recipecomposeapp.ui.theme.Dimens.paddingLarge
+import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 
 @Composable
 fun RecipesScreen(categoryId: Int, categoryTitle: String, modifier: Modifier = Modifier) {
@@ -42,7 +42,10 @@ fun RecipesScreen(categoryId: Int, categoryTitle: String, modifier: Modifier = M
                     onClick = { recipeId ->
                         // переход на детальный экран рецепта
                     },
-                    modifier = Modifier.padding(horizontal = paddingLarge)
+                    modifier = Modifier.padding(
+                        horizontal = paddingMedium,
+                        vertical = paddingMedium
+                    )
                 )
             }
         }

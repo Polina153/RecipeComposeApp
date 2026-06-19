@@ -85,7 +85,7 @@ fun PreviewRecipeItem() {
         recipe = RecipeUiModel(
             1,
             "Бургер",
-            "burger.jpg",
+            "file:///android_asset/burger.jpg",
             ingredients = listOf(
                 IngredientUiModel(name = "Булочка", quantity = "1", unitOfMeasure = "шт"),
                 IngredientUiModel(name = "Котлета", quantity = "1", unitOfMeasure = "шт")
