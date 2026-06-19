@@ -19,6 +19,7 @@ import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 @Composable
 fun RecipesApp() {
     var screenState: ScreenId by remember { mutableStateOf(ScreenId.CATEGORIES) }
+    var selectedCategoryId: Int? by remember { mutableStateOf(null) }
 
     RecipeComposeAppTheme() {
         Scaffold(
@@ -33,7 +34,11 @@ fun RecipesApp() {
         ) { paddingValues ->
             when (screenState) {
                 ScreenId.CATEGORIES -> CategoriesScreen(
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues),
+                    onCategoryClick = { categoryId ->
+                        selectedCategoryId = categoryId
+                        screenState = ScreenId.RECIPES
+                    }
                 )
 
                 ScreenId.FAVORITES -> FavoritesScreen(

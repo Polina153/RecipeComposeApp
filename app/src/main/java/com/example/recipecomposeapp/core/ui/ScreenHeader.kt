@@ -19,10 +19,11 @@ import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.theme.Dimens
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMain
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMediumLarge
+import com.example.recipecomposeapp.ui.theme.PrimaryColor
 
 @Composable
 fun ScreenHeader(imagePainter: Painter, contentDescription: String, title: String) {
-    Box(modifier = Modifier.height(Dimens.headerHeight)){
+    Box(modifier = Modifier.height(Dimens.headerHeight)) {
         Image(
             painter = imagePainter,
             contentDescription = contentDescription,
@@ -35,13 +36,23 @@ fun ScreenHeader(imagePainter: Painter, contentDescription: String, title: Strin
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(start = paddingMain, bottom = paddingMediumLarge),
-            content = { Text(title) }
+            content = {
+                Text(
+                    title,
+                    color = PrimaryColor,
+                    style = MaterialTheme.typography.displayLarge
+                )
+            }
         )
     }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun PreviewScreenHEader(){
-    ScreenHeader(painterResource(id = R.drawable.categories), "Заголовок экрана Категории","Категории")
+fun PreviewScreenHEader() {
+    ScreenHeader(
+        painterResource(id = R.drawable.categories),
+        "Заголовок экрана Категории",
+        "Категории"
+    )
 }
