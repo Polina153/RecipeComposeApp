@@ -17,13 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerExtraLarge
 import com.example.recipecomposeapp.ui.theme.Dimens.elevationMedium
+import com.example.recipecomposeapp.ui.theme.Dimens.heightImage
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingSmall
 
 
@@ -46,7 +46,7 @@ fun RecipeItem(recipe: RecipeUiModel, onClick: (Int) -> Unit, modifier: Modifier
                 contentDescription = "Карточка рецепта",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(heightImage)
                     .clip(
                         RoundedCornerShape(
                             topStart = cornerExtraLarge,

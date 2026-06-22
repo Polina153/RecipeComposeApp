@@ -50,6 +50,9 @@ fun RecipesApp() {
                 ScreenId.RECIPES -> RecipesScreen(
                     categoryId = selectedCategoryId ?: 0,
                     categoryTitle = selectedCategoryTitle ?: "Рецепты",
+                    onRecipeClick = { recipeId ->
+                        //TODO: переход на detailed экран рецепта
+                    },
                     modifier = Modifier.padding(paddingValues)
                 )
             }

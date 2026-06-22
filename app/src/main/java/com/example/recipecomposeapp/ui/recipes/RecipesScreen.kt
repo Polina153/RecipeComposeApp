@@ -21,7 +21,12 @@ import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 
 @Composable
-fun RecipesScreen(categoryId: Int, categoryTitle: String, modifier: Modifier = Modifier) {
+fun RecipesScreen(
+    categoryId: Int,
+    categoryTitle: String,
+    onRecipeClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     var recipes by remember { mutableStateOf<List<RecipeUiModel>>(emptyList()) }
 
@@ -29,18 +34,19 @@ fun RecipesScreen(categoryId: Int, categoryTitle: String, modifier: Modifier = M
         recipes = RecipesRepositoryStub.getRecipesByCategoryId(categoryId).map { it.toUiModel() }
     }
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier.fillMaxSize()) {
         ScreenHeader(
             painterResource(id = R.drawable.recipe),
             "Заголовок экрана Рецепты",
             categoryTitle
         )
-        LazyColumn() {
+        LazyColumn(modifier.weight(1f)) {
             items(recipes) { recipe ->
                 RecipeItem(
                     recipe = recipe,
+                    /*onClick = onRecipeClick*/
                     onClick = { recipeId ->
-                        // переход на детальный экран рецепта
+                        onRecipeClick(recipeId)
                     },
                     modifier = Modifier.padding(
                         horizontal = paddingMedium,
