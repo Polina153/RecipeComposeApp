@@ -20,6 +20,7 @@ import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 fun RecipesApp() {
     var screenState: ScreenId by remember { mutableStateOf(ScreenId.CATEGORIES) }
     var selectedCategoryId: Int? by remember { mutableStateOf(null) }
+    var selectedCategoryTitle: String? by remember { mutableStateOf(null) }
 
     RecipeComposeAppTheme() {
         Scaffold(
@@ -35,8 +36,9 @@ fun RecipesApp() {
             when (screenState) {
                 ScreenId.CATEGORIES -> CategoriesScreen(
                     modifier = Modifier.padding(paddingValues),
-                    onCategoryClick = { categoryId ->
+                    onCategoryClick = { categoryId, categoryTitle ->
                         selectedCategoryId = categoryId
+                        selectedCategoryTitle = categoryTitle
                         screenState = ScreenId.RECIPES
                     }
                 )
@@ -46,6 +48,11 @@ fun RecipesApp() {
                 )
 
                 ScreenId.RECIPES -> RecipesScreen(
+                    categoryId = selectedCategoryId,
+                    categoryTitle = selectedCategoryTitle ?: "Рецепты",
+                    onRecipeClick = { recipeId ->
+                        //TODO: переход на detailed экран рецепта
+                    },
                     modifier = Modifier.padding(paddingValues)
                 )
             }

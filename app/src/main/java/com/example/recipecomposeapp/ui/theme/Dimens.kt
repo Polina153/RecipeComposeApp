@@ -20,6 +20,7 @@ object Dimens {
     val heightSmallButton = 36.dp
     val heightMediumButton = 48.dp
     val heightLargeButton = 56.dp
+    val heightImage = 120.dp
 
     val heightTopAppBar = 56.dp
     val heightBottomBar = 64.dp
