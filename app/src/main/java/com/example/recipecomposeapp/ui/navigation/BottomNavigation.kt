@@ -1,62 +1,50 @@
 package com.example.recipecomposeapp.ui.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.recipecomposeapp.Destination
 
 @Composable
-fun BottomNavigation(
-    onCategoriesClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    onRecipesClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .navigationBarsPadding(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+fun BottomNavigation(navController: NavController) {
 
-    ) {
-        Button(
-            onClick = { onCategoriesClick() },
-            modifier = Modifier.weight(1f),
-            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-        ) {
-            Text("Категории")
-        }
-        Button(
-            onClick = { onFavoriteClick() },
-            modifier = Modifier.weight(1f),
-            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-        ) {
-            Text("Избранное")
-        }
-        Button(
-            onClick = { onRecipesClick() },
-            modifier = Modifier.weight(1f),
-            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-        ) {
-            Text("Рецепты")
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val items = listOf(
+        Destination.Categories,
+        Destination.Favorites
+    )
+    NavigationBar {
+        items.forEach { destination ->
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = when (destination) {
+                            Destination.Categories -> Icons.Default.Home
+                            Destination.Favorites -> Icons.Default.Favorite
+                            else -> Icons.Default.Home
+                        },
+                        contentDescription = destination.route
+                    )
+                },
+                label = { Text(destination.route) },
+                selected = navBackStackEntry?.destination?.route == destination.route,
+                onClick = {
+                    navController.navigate(destination.route) {
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun ShowBottomNavigation() {
-    BottomNavigation({ }, {}, {})
 }
