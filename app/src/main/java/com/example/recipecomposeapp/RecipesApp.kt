@@ -1,15 +1,15 @@
 package com.example.recipecomposeapp
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.recipecomposeapp.ui.categories.CategoriesScreen
 import com.example.recipecomposeapp.ui.favorites.FavoritesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
@@ -18,48 +18,72 @@ import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 
 @Composable
 fun RecipesApp() {
-    var screenState: ScreenId by remember { mutableStateOf(ScreenId.CATEGORIES) }
-    var selectedCategoryId: Int? by remember { mutableStateOf(null) }
-    var selectedCategoryTitle: String? by remember { mutableStateOf(null) }
+
+    val navController = rememberNavController()
+
 
     RecipeComposeAppTheme() {
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                BottomNavigation(
-                    onCategoriesClick = { screenState = ScreenId.CATEGORIES },
-                    onFavoriteClick = { screenState = ScreenId.FAVORITES },
-                    onRecipesClick = { screenState = ScreenId.RECIPES }
-                )
-            }
+            bottomBar = { BottomNavigation(navController) }
         ) { paddingValues ->
-            when (screenState) {
-                ScreenId.CATEGORIES -> CategoriesScreen(
-                    modifier = Modifier.padding(paddingValues),
-                    onCategoryClick = { categoryId, categoryTitle ->
-                        selectedCategoryId = categoryId
-                        selectedCategoryTitle = categoryTitle
-                        screenState = ScreenId.RECIPES
-                    }
-                )
+            NavHost(
+                navController = navController,
+                startDestination = Destination.Categories.route,
+                modifier = Modifier.padding(paddingValues)
+            ) {
+                composable(
+                    Destination.Categories.route
+                ) { backStackEntry ->
+                    CategoriesScreen(
+                        onCategoryClick = { categoryId, categoryTitle ->
+                            navController.navigate(
+                                Destination.Recipes.createRoute(
+                                    categoryId,
+                                    categoryTitle
+                                )
+                            )
+                        }
+                    )
 
-                ScreenId.FAVORITES -> FavoritesScreen(
-                    modifier = Modifier.padding(paddingValues)
-                )
-
-                ScreenId.RECIPES -> RecipesScreen(
-                    categoryId = selectedCategoryId,
-                    categoryTitle = selectedCategoryTitle ?: "Рецепты",
-                    onRecipeClick = { recipeId ->
-                        //TODO: переход на detailed экран рецепта
-                    },
-                    modifier = Modifier.padding(paddingValues)
-                )
+                }
+                composable(
+                    Destination.Favorites.route
+                ) { backStackEntry ->
+                    FavoritesScreen()
+                }
+                composable(
+                    Destination.Recipes.route,
+                    arguments = listOf(
+                        navArgument("categoryId") { type = NavType.IntType },
+                        navArgument("categoryTitle") {
+                            type =
+                                NavType.StringType
+                        })
+                ) { backStackEntry ->
+                    val selectedCategoryId = backStackEntry.arguments?.getInt("categoryId") ?: 0
+                    val selectedCategoryTitle =
+                        backStackEntry.arguments?.getString("categoryTitle")
+                    RecipesScreen(
+                        categoryId = selectedCategoryId,
+                        categoryTitle = selectedCategoryTitle ?: "Рецепты",
+                        onRecipeClick = { recipeId ->
+                            //navController.navigate(
+                                //TODO настроить переход на RecipeScreen
+                                /*Destination.Recipes.createRoute(
+                                    selectedCategoryId,
+                                    Uri.encode(selectedCategoryTitle)*/
+                            //)
+                        }
+                    )
+                }
             }
+
 
         }
     }
+
 }
+
 
 @Composable
 @Preview(showBackground = true)
