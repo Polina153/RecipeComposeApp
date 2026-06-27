@@ -73,8 +73,7 @@ fun RecipesApp() {
                                     selectedCategoryId,
                                     Uri.encode(selectedCategoryTitle)*/
                             //)
-                        },
-                        modifier = Modifier
+                        }
                     )
                 }
             }

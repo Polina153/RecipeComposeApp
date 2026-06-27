@@ -3,10 +3,10 @@ package com.example.recipecomposeapp
 import android.net.Uri
 
 sealed class Destination(val route: String) {
-    object Categories : Destination("categories")
-    object Favorites : Destination("favorites")
-    object Recipes : Destination("recipes/{categoryId}/{categoryTitle}") {
+    object Categories : Destination("Категории")
+    object Favorites : Destination("Избранное")
+    object Recipes : Destination("Рецепты/{categoryId}/{categoryTitle}") {
         fun createRoute(categoryId: Int, categoryTitle: String) =
-            "recipes/$categoryId/${Uri.encode(categoryTitle)}"
+            "Рецепты/$categoryId/${Uri.encode(categoryTitle)}"
     }
 }
