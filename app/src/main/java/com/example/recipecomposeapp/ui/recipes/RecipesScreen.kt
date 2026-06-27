@@ -24,7 +24,7 @@ import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 fun RecipesScreen(
     categoryId: Int?,
     categoryTitle: String,
-    onRecipeClick: (Int) -> Unit,
+    onRecipeClick: (Int, RecipeUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -46,9 +46,8 @@ fun RecipesScreen(
             items(recipes) { recipe ->
                 RecipeItem(
                     recipe = recipe,
-                    /*onClick = onRecipeClick*/
                     onClick = { recipeId ->
-                        onRecipeClick(recipeId)
+                        onRecipeClick(recipeId, recipe)
                     },
                     modifier = Modifier.padding(
                         horizontal = paddingMedium,

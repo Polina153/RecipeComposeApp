@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -56,4 +57,5 @@ dependencies {
     implementation(libs.coil.compose)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlin.parcelize.runtime)
 }
