@@ -17,12 +17,15 @@ data class RecipeUiModel constructor(
     val method: List<String>,
     val isFavorite: Boolean
 ) : Parcelable {
-    override fun describeContents(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun describeContents(): Int = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        TODO("Not yet implemented")
+        dest.writeInt(id)
+        dest.writeString(title)
+        dest.writeString(imageUrl)
+        dest.writeTypedList(ingredients)
+        dest.writeStringList(method)
+        dest.writeInt(if (isFavorite) 1 else 0)
     }
 }
 
