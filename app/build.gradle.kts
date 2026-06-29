@@ -1,6 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
+}
+
+kotlin {
+    compilerOptions {
+        //freeCompilerArgs.addAll("-Xexplicit-api=strict")
+    }
 }
 
 android {
@@ -56,4 +63,6 @@ dependencies {
     implementation(libs.coil.compose)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlin.parcelize.runtime)
+    add("kotlinCompilerPluginClasspath", libs.kotlin.parcelize.compiler)
 }

@@ -10,10 +10,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.recipecomposeapp.Constants.KEY_RECIPE_OBJECT
 import com.example.recipecomposeapp.ui.categories.CategoriesScreen
+import com.example.recipecomposeapp.ui.details.RecipeDetailsScreen
 import com.example.recipecomposeapp.ui.favorites.FavoritesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.recipes.RecipesScreen
+import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 
 @Composable
@@ -66,24 +69,29 @@ fun RecipesApp() {
                     RecipesScreen(
                         categoryId = selectedCategoryId,
                         categoryTitle = selectedCategoryTitle ?: "Рецепты",
-                        onRecipeClick = { recipeId ->
-                            //navController.navigate(
-                                //TODO настроить переход на RecipeScreen
-                                /*Destination.Recipes.createRoute(
-                                    selectedCategoryId,
-                                    Uri.encode(selectedCategoryTitle)*/
-                            //)
+                        onRecipeClick = { recipeId, recipe ->
+                            navController.currentBackStackEntry?.savedStateHandle[KEY_RECIPE_OBJECT] =
+                                recipe
+                            navController.navigate(Destination.Details.createRoute(recipeId))
                         }
                     )
                 }
+                composable(
+                    Destination.Details.route
+                ) { backStackEntry ->
+                    val recipe = navController
+                        .previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.get<RecipeUiModel>(KEY_RECIPE_OBJECT)
+
+                    recipe?.let {
+                        RecipeDetailsScreen(recipe = it)
+                    }
+                }
             }
-
-
         }
     }
-
 }
-
 
 @Composable
 @Preview(showBackground = true)
