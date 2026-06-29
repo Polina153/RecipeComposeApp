@@ -4,6 +4,12 @@ plugins {
     id("kotlin-parcelize")
 }
 
+kotlin {
+    compilerOptions {
+        //freeCompilerArgs.addAll("-Xexplicit-api=strict")
+    }
+}
+
 android {
     namespace = "com.example.recipecomposeapp"
     compileSdk {
@@ -58,4 +64,5 @@ dependencies {
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlin.parcelize.runtime)
+    add("kotlinCompilerPluginClasspath", libs.kotlin.parcelize.compiler)
 }

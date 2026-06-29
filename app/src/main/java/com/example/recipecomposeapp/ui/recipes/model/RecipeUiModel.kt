@@ -1,6 +1,5 @@
 package com.example.recipecomposeapp.ui.recipes.model
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.example.recipecomposeapp.Constants
@@ -16,18 +15,7 @@ data class RecipeUiModel constructor(
     val ingredients: List<IngredientUiModel>,
     val method: List<String>,
     val isFavorite: Boolean
-) : Parcelable {
-    override fun describeContents(): Int = 0
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(id)
-        dest.writeString(title)
-        dest.writeString(imageUrl)
-        dest.writeTypedList(ingredients)
-        dest.writeStringList(method)
-        dest.writeInt(if (isFavorite) 1 else 0)
-    }
-}
+) : Parcelable
 
 fun RecipeDto.toUiModel(): RecipeUiModel {
     return RecipeUiModel(
