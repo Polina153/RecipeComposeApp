@@ -13,14 +13,18 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.recipecomposeapp.R
+import coil3.compose.rememberAsyncImagePainter
 import com.example.recipecomposeapp.core.ui.ScreenHeader
+import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Companion.getRecipeById
 import com.example.recipecomposeapp.ui.recipes.IngredientItem
-import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
+import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.sliderHeight
@@ -29,7 +33,16 @@ import com.example.recipecomposeapp.ui.theme.recipesAppTypography
 import java.util.Locale
 
 @Composable
-fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
+fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipeId: Int) {
+
+    var recipe by remember { mutableStateOf<RecipeUiModel?>(null) }
+
+    LaunchedEffect(recipeId) {
+        val dto = getRecipeById(recipeId)
+        recipe = dto?.toUiModel()
+    }
+
+    val currentRecipe = recipe ?: return
 
     Column(
         modifier = modifier
@@ -38,9 +51,9 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
             .padding(paddingMedium)
     ) {
         ScreenHeader(
-            painterResource(id = R.drawable.favorites),
-            "Изображение рецепта ${recipe.title}",
-            recipe.title
+            rememberAsyncImagePainter(model = currentRecipe.imageUrl),
+            "Изображение рецепта ${currentRecipe.title}",
+            currentRecipe.title
         )
         Text(
             text = "Ингредиенты".uppercase(Locale.ROOT),
@@ -55,7 +68,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
-            recipe.ingredients.forEachIndexed { index, ingredient ->
+            currentRecipe.ingredients.forEachIndexed { index, ingredient ->
                 IngredientItem(
                     ingredient,
                     modifier = Modifier
@@ -64,7 +77,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
                             vertical = paddingMedium
                         )
                 )
-                if (index < recipe.ingredients.lastIndex) {
+                if (index < currentRecipe.ingredients.lastIndex) {
                     HorizontalDivider(
                         thickness = sliderHeight,
                         color = DividerColor
@@ -87,16 +100,16 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
-            recipe.method.forEachIndexed { index, method ->
+            currentRecipe.method.forEachIndexed { index, method ->
                 Text(
-                    method,
+                    "${index + 1}. $method",
                     modifier = Modifier
                         .padding(
                             horizontal = paddingMedium,
                             vertical = paddingMedium
                         )
                 )
-                if (index < recipe.method.lastIndex) {
+                if (index < currentRecipe.method.lastIndex) {
                     HorizontalDivider(
                         thickness = sliderHeight,
                         color = DividerColor
@@ -105,24 +118,4 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewRecipeDetailsScreen() {
-    RecipeDetailsScreen(
-        recipe = RecipeUiModel(
-            1,
-            "Бургер",
-            "file:///android_asset/burger.jpg",
-            ingredients = listOf(
-                IngredientUiModel(name = "Булочка", quantity = "1", unitOfMeasure = "шт"),
-                IngredientUiModel(name = "Котлета", quantity = "1", unitOfMeasure = "шт")
-            ),
-            listOf("Обжарить", "Нарезать", "Смешать", "Приготовить"),
-            isFavorite = false,
-        ),
-        modifier = Modifier
-    )
 }

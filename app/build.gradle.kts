@@ -65,4 +65,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlin.parcelize.runtime)
     add("kotlinCompilerPluginClasspath", libs.kotlin.parcelize.compiler)
+    implementation(libs.coil.network.okhttp)
 }

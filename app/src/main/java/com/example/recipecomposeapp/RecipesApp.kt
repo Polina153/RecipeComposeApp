@@ -16,7 +16,6 @@ import com.example.recipecomposeapp.ui.details.RecipeDetailsScreen
 import com.example.recipecomposeapp.ui.favorites.FavoritesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.recipes.RecipesScreen
-import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 
 @Composable
@@ -77,16 +76,19 @@ fun RecipesApp() {
                     )
                 }
                 composable(
-                    Destination.Details.route
+                    Destination.Details.route,
+                    arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
                 ) { backStackEntry ->
-                    val recipe = navController
+                    val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: return@composable
+                    RecipeDetailsScreen(modifier = Modifier, recipeId)
+                    /*val recipe = navController
                         .previousBackStackEntry
                         ?.savedStateHandle
                         ?.get<RecipeUiModel>(KEY_RECIPE_OBJECT)
 
                     recipe?.let {
                         RecipeDetailsScreen(recipe = it)
-                    }
+                    }*/
                 }
             }
         }

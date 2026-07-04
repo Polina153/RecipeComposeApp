@@ -27,7 +27,7 @@ fun IngredientItem(ingredient: IngredientUiModel, modifier: Modifier = Modifier)
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondaryColor,
             overflow = TextOverflow.Ellipsis,
-            modifier = modifier.weight(1f)
+            modifier = Modifier.weight(1f)
         )
         Text(
             text = "${ingredient.quantity} ${ingredient.unitOfMeasure}".uppercase(),
