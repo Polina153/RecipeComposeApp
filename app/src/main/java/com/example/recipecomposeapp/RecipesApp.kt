@@ -80,7 +80,7 @@ fun RecipesApp() {
                     arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
                 ) { backStackEntry ->
                     val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: return@composable
-                    RecipeDetailsScreen(modifier = Modifier, recipeId)
+                    RecipeDetailsScreen(modifier = Modifier, recipeId = recipeId)
                     /*val recipe = navController
                         .previousBackStackEntry
                         ?.savedStateHandle
