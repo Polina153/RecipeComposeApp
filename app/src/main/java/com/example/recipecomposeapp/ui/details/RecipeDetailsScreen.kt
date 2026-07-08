@@ -13,47 +13,36 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import coil3.compose.rememberAsyncImagePainter
 import com.example.recipecomposeapp.core.ui.ScreenHeader
-import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Companion.getRecipeById
 import com.example.recipecomposeapp.ui.recipes.IngredientItem
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
-import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.sliderHeight
 import com.example.recipecomposeapp.ui.theme.DividerColor
 import com.example.recipecomposeapp.ui.theme.recipesAppTypography
+import com.example.recipecomposeapp.utils.shareRecipe
 import java.util.Locale
 
 @Composable
-fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipeId: Int) {
+fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipe: RecipeUiModel) {
 
-    var recipe by remember { mutableStateOf<RecipeUiModel?>(null) }
-
-    LaunchedEffect(recipeId) {
-        val dto = getRecipeById(recipeId)
-        recipe = dto?.toUiModel()
-    }
-
-    val currentRecipe = recipe ?: return
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(paddingMedium)
     ) {
         ScreenHeader(
-            rememberAsyncImagePainter(model = currentRecipe.imageUrl),
-            "Изображение рецепта ${currentRecipe.title}",
-            currentRecipe.title
+            rememberAsyncImagePainter(model = recipe.imageUrl),
+            "Изображение рецепта ${recipe.title}",
+            recipe.title,
+            showShareButton = true,
+            onShareClick = { shareRecipe(context, recipe.id, recipe.title) }
         )
         Text(
             text = "Ингредиенты".uppercase(Locale.ROOT),
@@ -68,7 +57,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipeId: Int) {
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
-            currentRecipe.ingredients.forEachIndexed { index, ingredient ->
+            recipe.ingredients.forEachIndexed { index, ingredient ->
                 IngredientItem(
                     ingredient,
                     modifier = Modifier
@@ -77,7 +66,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipeId: Int) {
                             vertical = paddingMedium
                         )
                 )
-                if (index < currentRecipe.ingredients.lastIndex) {
+                if (index < recipe.ingredients.lastIndex) {
                     HorizontalDivider(
                         thickness = sliderHeight,
                         color = DividerColor
@@ -100,7 +89,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipeId: Int) {
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
-            currentRecipe.method.forEachIndexed { index, method ->
+            recipe.method.forEachIndexed { index, method ->
                 Text(
                     "${index + 1}. $method",
                     modifier = Modifier
@@ -109,7 +98,7 @@ fun RecipeDetailsScreen(modifier: Modifier = Modifier, recipeId: Int) {
                             vertical = paddingMedium
                         )
                 )
-                if (index < currentRecipe.method.lastIndex) {
+                if (index < recipe.method.lastIndex) {
                     HorizontalDivider(
                         thickness = sliderHeight,
                         color = DividerColor
