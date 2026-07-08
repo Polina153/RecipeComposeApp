@@ -23,7 +23,10 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
             "Заголовок экрана Избранное",
             "Избранное",
             false,
-            {}
+            {},
+            false,
+            isFavorite = false,
+            onFavoriteToggle = {},
         )
         Text(
             text = "Список избранных рецептов",

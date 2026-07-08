@@ -42,7 +42,10 @@ fun RecipesScreen(
             "Заголовок экрана Рецепты",
             categoryTitle,
             false,
-            {}
+            {},
+            false,
+            isFavorite = false,
+            onFavoriteToggle = {},
         )
         LazyColumn(modifier.weight(1f)) {
             items(recipes) { recipe ->

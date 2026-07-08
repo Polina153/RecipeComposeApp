@@ -30,13 +30,20 @@ fun IngredientItem(ingredient: IngredientUiModel, modifier: Modifier = Modifier)
             modifier = Modifier.weight(1f)
         )
         Text(
-            text = "${ingredient.quantity} ${ingredient.unitOfMeasure}".uppercase(),
+            text = "${formatAmount(ingredient.amount)} ${ingredient.unitOfMeasure}".uppercase(),
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondaryColor,
             overflow = TextOverflow.Ellipsis
         )
     }
+}
 
+private fun formatAmount(amount: Double): String {
+    return if (amount == amount.toLong().toDouble()) {
+        amount.toLong().toString()
+    } else {
+        "%.1f".format(amount)
+    }
 }
 
 @Preview

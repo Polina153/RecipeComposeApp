@@ -16,10 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.example.recipecomposeapp.R
-import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerExtraLarge
 import com.example.recipecomposeapp.ui.theme.Dimens.elevationMedium
@@ -78,6 +76,7 @@ fun RecipeItem(recipe: RecipeUiModel, onClick: (Int) -> Unit, modifier: Modifier
     }
 }
 
+/*
 @Preview
 @Composable
 fun PreviewRecipeItem() {
@@ -93,7 +92,9 @@ fun PreviewRecipeItem() {
             listOf("Обжарить", "Нарезать", "Смешать", "Приготовить"),
             isFavorite = false,
         ),
-        onClick = {/*TODO()*/ },
+        onClick = {*/
+/*TODO()*//*
+ },
         modifier = Modifier
     )
-}
+}*/
