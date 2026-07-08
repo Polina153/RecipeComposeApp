@@ -40,7 +40,9 @@ fun RecipesScreen(
         ScreenHeader(
             painterResource(id = R.drawable.recipe),
             "Заголовок экрана Рецепты",
-            categoryTitle
+            categoryTitle,
+            false,
+            {}
         )
         LazyColumn(modifier.weight(1f)) {
             items(recipes) { recipe ->

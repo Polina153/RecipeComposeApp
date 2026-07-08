@@ -21,7 +21,9 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
         ScreenHeader(
             painterResource(id = R.drawable.favorites),
             "Заголовок экрана Избранное",
-            "Избранное"
+            "Избранное",
+            false,
+            {}
         )
         Text(
             text = "Список избранных рецептов",

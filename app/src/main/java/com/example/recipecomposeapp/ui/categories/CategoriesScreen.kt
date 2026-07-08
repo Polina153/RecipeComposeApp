@@ -29,7 +29,9 @@ fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int, Strin
         ScreenHeader(
             painterResource(id = R.drawable.categories),
             "Заголовок экрана Категории",
-            "Категории"
+            "Категории",
+            false,
+            {}
         )
         LazyVerticalGrid(
             GridCells.Fixed(2),
