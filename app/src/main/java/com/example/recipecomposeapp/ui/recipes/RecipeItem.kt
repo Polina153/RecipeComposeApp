@@ -93,7 +93,7 @@ fun PreviewRecipeItem() {
             listOf("Обжарить", "Нарезать", "Смешать", "Приготовить"),
             isFavorite = false,
         ),
-        onClick = TODO(),
+        onClick = {/*TODO()*/ },
         modifier = Modifier
     )
 }

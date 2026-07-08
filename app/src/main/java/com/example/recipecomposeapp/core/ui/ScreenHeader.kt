@@ -49,7 +49,7 @@ fun ScreenHeader(imagePainter: Painter, contentDescription: String, title: Strin
 
 @Composable
 @Preview(showBackground = true)
-fun PreviewScreenHEader() {
+fun PreviewScreenHeader() {
     ScreenHeader(
         painterResource(id = R.drawable.categories),
         "Заголовок экрана Категории",
