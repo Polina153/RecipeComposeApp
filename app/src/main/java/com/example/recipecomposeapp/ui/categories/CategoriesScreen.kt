@@ -32,7 +32,7 @@ fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int, Strin
             "Категории",
             false,
             {},
-            showFavoriteButton = true,
+            showFavoriteButton = false,
             isFavorite = false,
             onFavoriteToggle = {},
         )

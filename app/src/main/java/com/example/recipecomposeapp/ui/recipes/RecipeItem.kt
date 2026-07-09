@@ -75,26 +75,3 @@ fun RecipeItem(recipe: RecipeUiModel, onClick: (Int) -> Unit, modifier: Modifier
 
     }
 }
-
-/*
-@Preview
-@Composable
-fun PreviewRecipeItem() {
-    RecipeItem(
-        recipe = RecipeUiModel(
-            1,
-            "Бургер",
-            "file:///android_asset/burger.jpg",
-            ingredients = listOf(
-                IngredientUiModel(name = "Булочка", quantity = "1", unitOfMeasure = "шт"),
-                IngredientUiModel(name = "Котлета", quantity = "1", unitOfMeasure = "шт")
-            ),
-            listOf("Обжарить", "Нарезать", "Смешать", "Приготовить"),
-            isFavorite = false,
-        ),
-        onClick = {*/
-/*TODO()*//*
- },
-        modifier = Modifier
-    )
-}*/

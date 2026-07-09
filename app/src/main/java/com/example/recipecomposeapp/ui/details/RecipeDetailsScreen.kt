@@ -38,12 +38,13 @@ import kotlin.math.roundToInt
 @Composable
 fun RecipeDetailsScreen(
     modifier: Modifier = Modifier,
-    recipe: RecipeUiModel
+    recipe: RecipeUiModel,
+    isFavorite: Boolean,
+    onFavoriteToggle: () -> Unit
 ) {
 
     val context = LocalContext.current
     var currentPortions by rememberSaveable { mutableStateOf(recipe.servings) }
-    var isFavorite by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -58,7 +59,7 @@ fun RecipeDetailsScreen(
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoriteButton = true,
             isFavorite = isFavorite,
-            onFavoriteToggle = { isFavorite = !isFavorite }
+            onFavoriteToggle = onFavoriteToggle
         )
         Text(
             text = "Ингредиенты".uppercase(Locale.ROOT),
@@ -90,7 +91,7 @@ fun RecipeDetailsScreen(
                 val multiplier = currentPortions.toDouble() / recipe.servings
                 recipe.ingredients.map { ingredient ->
                     ingredient.copy(
-                        amount = ingredient.amount * multiplier
+                        amount = ingredient.amount?.let { it * multiplier }
                     )
                 }
             }
@@ -128,7 +129,7 @@ fun RecipeDetailsScreen(
         ) {
             recipe.method.forEachIndexed { index, method ->
                 Text(
-                    "${index + 1}. $method",
+                    "${index + 1}. $ method",
                     modifier = Modifier
                         .padding(
                             horizontal = paddingMedium,

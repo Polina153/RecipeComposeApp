@@ -11,7 +11,7 @@ data class IngredientUiModel(
     val name: String,
     val quantity: String,
     val unitOfMeasure: String,
-    val amount: Double
+    val amount: Double?
 ) : Parcelable
 
 fun IngredientDto.toUiModel(): IngredientUiModel {
@@ -19,6 +19,6 @@ fun IngredientDto.toUiModel(): IngredientUiModel {
         name = description,
         quantity = quantity,
         unitOfMeasure = unitOfMeasure,
-        amount = quantity.toDoubleOrNull() ?: 0.0
+        amount = quantity.toDoubleOrNull()
     )
 }

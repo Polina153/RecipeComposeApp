@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.R
@@ -30,6 +31,7 @@ import com.example.recipecomposeapp.ui.theme.Dimens
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMain
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMediumLarge
 import com.example.recipecomposeapp.ui.theme.PrimaryColor
+import com.example.recipecomposeapp.ui.theme.SurfaceColor
 
 @Composable
 fun ScreenHeader(
@@ -90,6 +92,16 @@ fun ScreenHeader(
                             modifier = Modifier.size(28.dp)
                         )
                     }
+                }
+            }
+            if (showShareButton) {
+                IconButton(onClick = onShareClick, modifier = Modifier.size(48.dp)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = "Поделиться",
+                        tint = SurfaceColor,
+                        modifier = Modifier.size(28.dp)
+                    )
                 }
             }
         }
