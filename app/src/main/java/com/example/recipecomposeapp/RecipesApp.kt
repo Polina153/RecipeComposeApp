@@ -112,9 +112,7 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     recipe?.let {
                         RecipeDetailsScreen(
                             modifier = Modifier,
-                            recipe = it,
-                            isFavorite = isFavorite,
-                            onFavoriteToggle = { isFavorite = !isFavorite })
+                            recipe = it)
                     }
                 }
             }
