@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -100,8 +104,17 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 ) { backStackEntry ->
                     val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: return@composable
                     val recipe = getRecipeById(recipeId)?.toUiModel()
+                    var isFavorite by rememberSaveable {
+                        mutableStateOf(
+                            recipe?.isFavorite ?: false
+                        )
+                    }
                     recipe?.let {
-                        RecipeDetailsScreen(modifier = Modifier, recipe = it)
+                        RecipeDetailsScreen(
+                            modifier = Modifier,
+                            recipe = it,
+                            isFavorite = isFavorite,
+                            onFavoriteToggle = { isFavorite = !isFavorite })
                     }
                 }
             }

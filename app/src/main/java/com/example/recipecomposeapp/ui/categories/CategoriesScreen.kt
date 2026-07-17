@@ -31,7 +31,10 @@ fun CategoriesScreen(modifier: Modifier = Modifier, onCategoryClick: (Int, Strin
             "Заголовок экрана Категории",
             "Категории",
             false,
-            {}
+            {},
+            showFavoriteButton = false,
+            isFavorite = false,
+            onFavoriteToggle = {},
         )
         LazyVerticalGrid(
             GridCells.Fixed(2),

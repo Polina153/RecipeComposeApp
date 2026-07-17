@@ -10,13 +10,15 @@ import kotlinx.parcelize.Parcelize
 data class IngredientUiModel(
     val name: String,
     val quantity: String,
-    val unitOfMeasure: String
+    val unitOfMeasure: String,
+    val amount: Double?
 ) : Parcelable
 
 fun IngredientDto.toUiModel(): IngredientUiModel {
     return IngredientUiModel(
         name = description,
         quantity = quantity,
-        unitOfMeasure = unitOfMeasure
+        unitOfMeasure = unitOfMeasure,
+        amount = quantity.toDoubleOrNull()
     )
 }
