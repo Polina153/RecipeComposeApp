@@ -15,6 +15,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,20 +32,21 @@ import com.example.recipecomposeapp.ui.theme.Dimens.sliderHeight
 import com.example.recipecomposeapp.ui.theme.DividerColor
 import com.example.recipecomposeapp.ui.theme.TextSecondaryColor
 import com.example.recipecomposeapp.ui.theme.recipesAppTypography
-import com.example.recipecomposeapp.utils.shareRecipe
+import com.example.recipecomposeapp.util.FavoritePrefsManager
+import com.example.recipecomposeapp.util.shareRecipe
 import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
 fun RecipeDetailsScreen(
     modifier: Modifier = Modifier,
-    recipe: RecipeUiModel,
-    isFavorite: Boolean,
-    onFavoriteToggle: () -> Unit
+    recipe: RecipeUiModel
 ) {
 
     val context = LocalContext.current
-    var currentPortions by rememberSaveable { mutableStateOf(recipe.servings) }
+    var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
+    val prefManager = FavoritePrefsManager(context)
+    var isFavorite by remember { mutableStateOf(prefManager.isFavorite(recipe.id)) }
 
     Column(
         modifier = modifier
@@ -59,7 +61,14 @@ fun RecipeDetailsScreen(
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoriteButton = true,
             isFavorite = isFavorite,
-            onFavoriteToggle = onFavoriteToggle
+            onFavoriteToggle = {
+                isFavorite = !isFavorite
+                if (prefManager.isFavorite(recipeId = recipe.id)) {
+                    prefManager.removeFromFavorites(recipeId = recipe.id)
+                } else {
+                    prefManager.addToFavorites(recipeId = recipe.id)
+                }
+            }
         )
         Text(
             text = "Ингредиенты".uppercase(Locale.ROOT),
