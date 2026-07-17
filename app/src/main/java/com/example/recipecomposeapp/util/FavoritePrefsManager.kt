@@ -10,7 +10,7 @@ class FavoritePrefsManager(val context: Context) {
     fun isFavorite(recipeId: Int): Boolean {
         val sharedPreferences = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE)
         val favoriteRecipeIds = sharedPreferences.getStringSet(PREF_ID_KEY, emptySet())
-        return favoriteRecipeIds!!.contains(recipeId.toString())
+        return favoriteRecipeIds.orEmpty().contains(recipeId.toString())
     }
 
     fun addToFavorites(recipeId: Int) {
@@ -36,6 +36,6 @@ class FavoritePrefsManager(val context: Context) {
     fun getAllFavorites(): Set<String> {
         val sharedPreferences = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE)
         val favoriteRecipeIds = sharedPreferences.getStringSet(PREF_ID_KEY, emptySet())
-        return favoriteRecipeIds!!
+        return favoriteRecipeIds.orEmpty()
     }
 }

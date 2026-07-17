@@ -45,7 +45,7 @@ fun RecipeDetailsScreen(
 
     val context = LocalContext.current
     var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
-    val prefManager = FavoritePrefsManager(context)
+    val prefManager = remember { FavoritePrefsManager(context) }
     var isFavorite by remember { mutableStateOf(prefManager.isFavorite(recipe.id)) }
 
     Column(
