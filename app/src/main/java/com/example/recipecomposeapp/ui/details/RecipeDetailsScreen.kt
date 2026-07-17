@@ -129,7 +129,7 @@ fun RecipeDetailsScreen(
         ) {
             recipe.method.forEachIndexed { index, method ->
                 Text(
-                    "${index + 1}. $ method",
+                    "${index + 1}. $method",
                     modifier = Modifier
                         .padding(
                             horizontal = paddingMedium,
