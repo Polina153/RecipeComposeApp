@@ -10,7 +10,6 @@ object Constants {
     const val PARAM_RECIPE_ID = "recipeId"
 
     const val PREF_KEY = "recipe_app_prefs"
-    const val PREF_ID_KEY = "favorite_recipe_ids"
 
     fun createRecipeDeepLink(recipeId: Int): String {
         return "$DEEP_LINK_BASE_URL/recipe/$recipeId"

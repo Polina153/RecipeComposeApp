@@ -1,0 +1,25 @@
+package com.example.recipecomposeapp.util
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.recipecomposeapp.Constants.PREF_KEY
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "recipe_app_prefs",
+    produceMigrations = { context ->
+        listOf(
+            SharedPreferencesMigration(
+                context = context,
+                sharedPreferencesName = PREF_KEY
+            )
+        )
+    }
+)
+
+object PreferencesKeys {
+    val FAVORITE_RECIPE_IDS = stringSetPreferencesKey("favorite_recipe_ids")
+}

@@ -61,9 +61,10 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.coil.compose)
-    // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlin.parcelize.runtime)
     add("kotlinCompilerPluginClasspath", libs.kotlin.parcelize.compiler)
     implementation(libs.coil.network.okhttp)
+
+    implementation(libs.androidx.datastore.preferences)
 }
