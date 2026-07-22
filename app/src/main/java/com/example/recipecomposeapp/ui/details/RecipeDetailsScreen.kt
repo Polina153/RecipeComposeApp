@@ -141,7 +141,7 @@ fun RecipeDetailsScreen(
                 .padding(paddingMedium)
         )
         Card(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingMedium),
             shape = RoundedCornerShape(cornerMedium),
