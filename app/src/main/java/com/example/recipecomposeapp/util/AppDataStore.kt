@@ -6,7 +6,7 @@ import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.recipecomposeapp.Constants.PREF_OLD_NAME
+import com.example.recipecomposeapp.Constants.PREF_KEY
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "recipe_app_prefs",
@@ -14,7 +14,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
         listOf(
             SharedPreferencesMigration(
                 context = context,
-                sharedPreferencesName = PREF_OLD_NAME
+                sharedPreferencesName = PREF_KEY
             )
         )
     }

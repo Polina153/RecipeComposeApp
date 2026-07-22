@@ -102,7 +102,7 @@ fun RecipeDetailsScreen(
             onPortionsChange = { currentPortions = it }
         )
         Card(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
