@@ -14,10 +14,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,8 +34,9 @@ import com.example.recipecomposeapp.ui.theme.Dimens.sliderHeight
 import com.example.recipecomposeapp.ui.theme.DividerColor
 import com.example.recipecomposeapp.ui.theme.TextSecondaryColor
 import com.example.recipecomposeapp.ui.theme.recipesAppTypography
-import com.example.recipecomposeapp.util.FavoritePrefsManager
+import com.example.recipecomposeapp.util.FavoriteDataStoreManager
 import com.example.recipecomposeapp.util.shareRecipe
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -44,9 +47,15 @@ fun RecipeDetailsScreen(
 ) {
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
-    val prefManager = remember(context) { FavoritePrefsManager(context) }
-    var isFavorite by remember { mutableStateOf(prefManager.isFavorite(recipe.id)) }
+    val dataStoreManager = remember(context) { FavoriteDataStoreManager(context) }
+    var isFavorite by remember { mutableStateOf(false) }
+
+    LaunchedEffect(recipe.id) {
+        isFavorite = dataStoreManager.isFavorite(recipe.id)
+    }
 
     Column(
         modifier = modifier
@@ -62,11 +71,13 @@ fun RecipeDetailsScreen(
             showFavoriteButton = true,
             isFavorite = isFavorite,
             onFavoriteToggle = {
-                isFavorite = !isFavorite
-                if (prefManager.isFavorite(recipeId = recipe.id)) {
-                    prefManager.removeFromFavorites(recipeId = recipe.id)
-                } else {
-                    prefManager.addToFavorites(recipeId = recipe.id)
+                scope.launch {
+                    isFavorite = !isFavorite
+                    if (dataStoreManager.isFavorite(recipeId = recipe.id)) {
+                        dataStoreManager.removeFavorite(recipeId = recipe.id)
+                    } else {
+                        dataStoreManager.addFavorite(recipeId = recipe.id)
+                    }
                 }
             }
         )
