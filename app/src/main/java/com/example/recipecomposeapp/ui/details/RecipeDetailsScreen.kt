@@ -72,12 +72,12 @@ fun RecipeDetailsScreen(
             isFavorite = isFavorite,
             onFavoriteToggle = {
                 scope.launch {
-                    isFavorite = !isFavorite
                     if (dataStoreManager.isFavorite(recipeId = recipe.id)) {
                         dataStoreManager.removeFavorite(recipeId = recipe.id)
                     } else {
                         dataStoreManager.addFavorite(recipeId = recipe.id)
                     }
+                    isFavorite = !isFavorite
                 }
             }
         )
