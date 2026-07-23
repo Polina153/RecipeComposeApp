@@ -14,10 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -51,11 +50,10 @@ fun RecipeDetailsScreen(
 
     var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
     val dataStoreManager = remember(context) { FavoriteDataStoreManager(context) }
-    var isFavorite by remember { mutableStateOf(false) }
+    val isFavorite by remember(recipe.id) {
+        dataStoreManager.isFavoriteFlow(recipe.id)
+    }.collectAsState(initial = false)
 
-    LaunchedEffect(recipe.id) {
-        isFavorite = dataStoreManager.isFavorite(recipe.id)
-    }
 
     Column(
         modifier = modifier
@@ -72,12 +70,13 @@ fun RecipeDetailsScreen(
             isFavorite = isFavorite,
             onFavoriteToggle = {
                 scope.launch {
-                    if (dataStoreManager.isFavorite(recipeId = recipe.id)) {
-                        dataStoreManager.removeFavorite(recipeId = recipe.id)
+                    if (isFavorite) {
+                        dataStoreManager.removeFavorite(recipe.id)
                     } else {
-                        dataStoreManager.addFavorite(recipeId = recipe.id)
+                        dataStoreManager.addFavorite(recipe.id)
                     }
-                    isFavorite = !isFavorite
+                    // UI обновится автоматически через Flow!
+                    // Больше не нужно вручную перезапрашивать состояние
                 }
             }
         )
