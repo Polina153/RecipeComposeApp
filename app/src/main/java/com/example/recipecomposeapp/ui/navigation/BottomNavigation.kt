@@ -26,11 +26,8 @@ fun BottomNavigation(navController: NavController) {
 
     val context = LocalContext.current
     val dataStoreManager = remember(context) { FavoriteDataStoreManager(context) }
-    val count: Int by dataStoreManager
-        .getFavoriteCountFlow()
-        .collectAsState(
-            initial = 0
-        )
+    val favoriteCountFlow = remember { dataStoreManager.getFavoriteCountFlow() }
+    val count by favoriteCountFlow.collectAsState(initial = 0)
 
     val items = listOf(
         Destination.Categories,

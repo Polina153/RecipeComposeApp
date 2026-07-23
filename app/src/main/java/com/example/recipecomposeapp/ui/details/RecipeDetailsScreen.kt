@@ -50,9 +50,9 @@ fun RecipeDetailsScreen(
 
     var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
     val dataStoreManager = remember(context) { FavoriteDataStoreManager(context) }
-    val isFavorite by dataStoreManager
-        .isFavoriteFlow(recipe.id)
-        .collectAsState(initial = false)
+    val isFavorite by remember(recipe.id) {
+        dataStoreManager.isFavoriteFlow(recipe.id)
+    }.collectAsState(initial = false)
 
 
     Column(
