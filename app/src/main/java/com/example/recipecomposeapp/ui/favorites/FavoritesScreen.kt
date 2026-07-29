@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.core.ui.ScreenHeader
-import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub
+import com.example.recipecomposeapp.data.repository.RecipesRepository
 import com.example.recipecomposeapp.ui.recipes.RecipeItem
 import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingLarge
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
-    repository: RecipesRepositoryStub,
+    repository: RecipesRepository,
     onRecipeClick: (Int) -> Unit,
     manager: FavoriteDataStoreManager
 ) {

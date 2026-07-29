@@ -63,10 +63,13 @@ fun BottomNavigation(navController: NavController) {
                 selected = navBackStackEntry?.destination?.route == destination.route,
                 onClick = {
                     navController.navigate(destination.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
                         launchSingleTop = true
                     }
                 }
-                /*onClick = {
+               /* onClick = {
                     navController.navigate(destination.route) {
                         popUpTo(navController.graph.startDestinationId) { saveState = true }
                         launchSingleTop = true
