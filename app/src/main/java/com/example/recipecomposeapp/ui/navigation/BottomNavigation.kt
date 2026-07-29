@@ -67,6 +67,7 @@ fun BottomNavigation(navController: NavController) {
                             saveState = true
                         }
                         launchSingleTop = true
+                        restoreState = true
                     }
                 }
                /* onClick = {

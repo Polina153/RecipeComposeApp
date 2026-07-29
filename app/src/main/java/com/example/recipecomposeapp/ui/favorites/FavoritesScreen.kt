@@ -67,8 +67,12 @@ fun FavoritesScreen(
                     .padding(paddingLarge)
             )
         }
-        LazyColumn(modifier.weight(1f)) {
-            items(listFavoriteRecipes) { recipe ->
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        )  {
+            items(listFavoriteRecipes, key = { it.id }) { recipe ->
                 RecipeItem(
                     recipe = recipe,
                     onClick = { recipeId ->
