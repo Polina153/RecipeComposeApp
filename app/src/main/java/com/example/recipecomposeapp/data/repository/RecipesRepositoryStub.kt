@@ -6,6 +6,11 @@ import com.example.recipecomposeapp.data.model.RecipeDto
 import java.util.Collections.emptyList
 
 class RecipesRepositoryStub {
+
+    fun getRecipeById(recipeId: Int): RecipeDto? {
+        return listOf(burgerRecipes).flatten().find { it.id == recipeId }
+    }
+
     companion object {
         fun getCategories(): List<CategoryDto> {
             return categories
