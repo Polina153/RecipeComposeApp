@@ -1,4 +1,4 @@
-package com.example.recipecomposeapp.ui.favorites
+package com.example.recipecomposeapp.features.favorites.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +17,8 @@ import androidx.compose.ui.res.painterResource
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.data.repository.RecipesRepository
-import com.example.recipecomposeapp.ui.recipes.RecipeItem
-import com.example.recipecomposeapp.ui.recipes.model.toUiModel
+import com.example.recipecomposeapp.features.recipes.ui.RecipeItem
+import com.example.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingLarge
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 import com.example.recipecomposeapp.util.FavoriteDataStoreManager

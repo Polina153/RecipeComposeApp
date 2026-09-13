@@ -1,9 +1,11 @@
-package com.example.recipecomposeapp.ui.recipes.model
+package com.example.recipecomposeapp.features.recipes.presentation.model
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.example.recipecomposeapp.Constants
 import com.example.recipecomposeapp.data.model.RecipeDto
+import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
+import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
