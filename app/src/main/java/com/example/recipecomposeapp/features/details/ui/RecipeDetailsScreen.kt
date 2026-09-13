@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.rememberAsyncImagePainter
 import com.example.recipecomposeapp.core.ui.ScreenHeader
-import com.example.recipecomposeapp.ui.recipes.IngredientItem
+import com.example.recipecomposeapp.features.recipes.ui.IngredientItem
 import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
