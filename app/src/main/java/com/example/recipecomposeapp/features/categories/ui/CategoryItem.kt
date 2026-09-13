@@ -1,8 +1,8 @@
-package com.example.recipecomposeapp.ui.recipes
+package com.example.recipecomposeapp.features.categories.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -18,17 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil3.compose.AsyncImage
 import com.example.recipecomposeapp.R
-import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
+import com.example.recipecomposeapp.features.categories.presentation.model.CategoryUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerExtraLarge
 import com.example.recipecomposeapp.ui.theme.Dimens.elevationMedium
-import com.example.recipecomposeapp.ui.theme.Dimens.heightImage
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingSmall
 
-
 @Composable
-fun RecipeItem(recipe: RecipeUiModel, onClick: (Int) -> Unit, modifier: Modifier = Modifier) {
+fun CategoryItem(category: CategoryUiModel, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
-        onClick = { onClick(recipe.id) },
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(cornerExtraLarge),
         elevation = CardDefaults.cardElevation(elevationMedium),
@@ -40,11 +38,11 @@ fun RecipeItem(recipe: RecipeUiModel, onClick: (Int) -> Unit, modifier: Modifier
                 .padding(paddingSmall)
         ) {
             AsyncImage(
-                model = recipe.imageUrl,
-                contentDescription = "Карточка рецепта",
+                model = category.imageUrl,
+                contentDescription = "Карточка категорий",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(heightImage)
+                    .aspectRatio(1.2f)     // фиксированное соотношение сторон
                     .clip(
                         RoundedCornerShape(
                             topStart = cornerExtraLarge,
@@ -56,19 +54,15 @@ fun RecipeItem(recipe: RecipeUiModel, onClick: (Int) -> Unit, modifier: Modifier
                 error = painterResource(R.drawable.img_error)
             )
             Text(
-                text = recipe.title,  // заглавные
+                text = category.title,  // заглавные
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "Ингредиенты",  // заглавные
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = recipe.ingredients.joinToString(", ") { it.name },
+                text = category.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
         }

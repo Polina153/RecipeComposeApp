@@ -17,12 +17,12 @@ import androidx.navigation.navArgument
 import com.example.recipecomposeapp.Constants.KEY_RECIPE_OBJECT
 import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub
 import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Companion.getRecipeById
-import com.example.recipecomposeapp.ui.categories.CategoriesScreen
-import com.example.recipecomposeapp.ui.details.RecipeDetailsScreen
-import com.example.recipecomposeapp.ui.favorites.FavoritesScreen
+import com.example.recipecomposeapp.features.categories.ui.CategoriesScreen
+import com.example.recipecomposeapp.features.details.ui.RecipeDetailsScreen
+import com.example.recipecomposeapp.features.favorites.ui.FavoritesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
-import com.example.recipecomposeapp.ui.recipes.RecipesScreen
-import com.example.recipecomposeapp.ui.recipes.model.toUiModel
+import com.example.recipecomposeapp.features.recipes.ui.RecipesScreen
+import com.example.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 import com.example.recipecomposeapp.util.FavoriteDataStoreManager
 

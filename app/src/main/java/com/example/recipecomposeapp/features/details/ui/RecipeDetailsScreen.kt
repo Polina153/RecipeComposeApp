@@ -1,4 +1,4 @@
-package com.example.recipecomposeapp.ui.details
+package com.example.recipecomposeapp.features.details.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.rememberAsyncImagePainter
 import com.example.recipecomposeapp.core.ui.ScreenHeader
-import com.example.recipecomposeapp.ui.recipes.IngredientItem
-import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
+import com.example.recipecomposeapp.features.recipes.ui.IngredientItem
+import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.sliderHeight

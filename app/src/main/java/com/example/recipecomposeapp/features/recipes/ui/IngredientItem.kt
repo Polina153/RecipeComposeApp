@@ -1,4 +1,4 @@
-package com.example.recipecomposeapp.ui.recipes
+package com.example.recipecomposeapp.features.recipes.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.recipecomposeapp.data.model.IngredientDto
-import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
-import com.example.recipecomposeapp.ui.recipes.model.toUiModel
+import com.example.recipecomposeapp.features.recipes.presentation.model.IngredientUiModel
+import com.example.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingSmall
 import com.example.recipecomposeapp.ui.theme.TextSecondaryColor
 
