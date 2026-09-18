@@ -22,8 +22,9 @@ import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 
 @Composable
 fun RecipesScreen(
-    categoryId: Int?,
+    categoryId: Int,
     categoryTitle: String,
+    categoryImageUrl: String,
     onRecipeClick: (Int, RecipeUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -31,9 +32,7 @@ fun RecipesScreen(
     var recipes by remember { mutableStateOf<List<RecipeUiModel>>(emptyList()) }
 
     LaunchedEffect(categoryId) {
-        categoryId?.let{
-            recipes = RecipesRepositoryStub.getRecipesByCategoryId(it).map { it.toUiModel() }
-        }
+        recipes = RecipesRepositoryStub.getRecipesByCategoryId(categoryId).map { it.toUiModel() }
     }
 
     Column(modifier.fillMaxSize()) {

@@ -20,9 +20,9 @@ import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Compan
 import com.example.recipecomposeapp.features.categories.ui.CategoriesScreen
 import com.example.recipecomposeapp.features.details.ui.RecipeDetailsScreen
 import com.example.recipecomposeapp.features.favorites.ui.FavoritesScreen
-import com.example.recipecomposeapp.ui.navigation.BottomNavigation
-import com.example.recipecomposeapp.features.recipes.ui.RecipesScreen
 import com.example.recipecomposeapp.features.recipes.presentation.model.toUiModel
+import com.example.recipecomposeapp.features.recipes.ui.RecipesScreen
+import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 import com.example.recipecomposeapp.util.FavoriteDataStoreManager
 
@@ -64,11 +64,12 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     Destination.Categories.route
                 ) { backStackEntry ->
                     CategoriesScreen(
-                        onCategoryClick = { categoryId, categoryTitle ->
+                        onCategoryClick = { categoryId, categoryTitle, categoryImageUrl ->
                             navController.navigate(
                                 Destination.Recipes.createRoute(
                                     categoryId,
-                                    categoryTitle
+                                    categoryTitle,
+                                    categoryImageUrl
                                 )
                             )
                         }
@@ -93,14 +94,20 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                         navArgument("categoryTitle") {
                             type =
                                 NavType.StringType
+                        },
+                        navArgument("categoryImageUrl") {
+                            type = NavType.StringType
                         })
                 ) { backStackEntry ->
                     val selectedCategoryId = backStackEntry.arguments?.getInt("categoryId") ?: 0
                     val selectedCategoryTitle =
                         backStackEntry.arguments?.getString("categoryTitle")
+                    val selectedCategoryImage =
+                        backStackEntry.arguments?.getString("categoryImageUrl") ?: ""
                     RecipesScreen(
                         categoryId = selectedCategoryId,
                         categoryTitle = selectedCategoryTitle ?: "Рецепты",
+                        categoryImageUrl = selectedCategoryImage,
                         onRecipeClick = { recipeId, recipe ->
                             navController.currentBackStackEntry?.savedStateHandle[KEY_RECIPE_OBJECT] =
                                 recipe
