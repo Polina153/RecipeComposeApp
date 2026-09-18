@@ -53,8 +53,7 @@ fun CategoriesScreen(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxSize()
-                       ,
+                        .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) { CircularProgressIndicator() }
             } // 2. Состояние ошибки
