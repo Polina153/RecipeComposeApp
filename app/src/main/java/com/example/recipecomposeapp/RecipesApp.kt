@@ -15,6 +15,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.recipecomposeapp.Constants.KEY_RECIPE_OBJECT
+import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_ID
+import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_IMAGE_URL
+import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_TITLE
+import com.example.recipecomposeapp.Constants.PARAM_RECIPE_ID
 import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub
 import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Companion.getRecipeById
 import com.example.recipecomposeapp.features.categories.ui.CategoriesScreen
@@ -90,36 +94,31 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 composable(
                     Destination.Recipes.route,
                     arguments = listOf(
-                        navArgument("categoryId") { type = NavType.IntType },
-                        navArgument("categoryTitle") {
+                        navArgument(PARAM_CATEGORY_ID) { type = NavType.IntType },
+                        navArgument(PARAM_CATEGORY_TITLE) {
                             type =
                                 NavType.StringType
                         },
-                        navArgument("categoryImageUrl") {
+                        navArgument(PARAM_CATEGORY_IMAGE_URL) {
                             type = NavType.StringType
                         })
                 ) { backStackEntry ->
-                    val selectedCategoryId = backStackEntry.arguments?.getInt("categoryId") ?: 0
-                    val selectedCategoryTitle =
-                        backStackEntry.arguments?.getString("categoryTitle")
-                    val selectedCategoryImage =
-                        backStackEntry.arguments?.getString("categoryImageUrl") ?: ""
+                    val selectedCategoryId = backStackEntry.arguments?.getInt(PARAM_CATEGORY_ID) ?: 0
+
                     RecipesScreen(
-                        categoryId = selectedCategoryId,
-                        categoryTitle = selectedCategoryTitle ?: "Рецепты",
-                        categoryImageUrl = selectedCategoryImage,
+                        modifier = Modifier,
                         onRecipeClick = { recipeId, recipe ->
                             navController.currentBackStackEntry?.savedStateHandle[KEY_RECIPE_OBJECT] =
                                 recipe
                             navController.navigate(Destination.Details.createRoute(recipeId))
-                        }
+                        },
                     )
                 }
                 composable(
                     Destination.Details.route,
-                    arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+                    arguments = listOf(navArgument(PARAM_RECIPE_ID) { type = NavType.IntType })
                 ) { backStackEntry ->
-                    val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: return@composable
+                    val recipeId = backStackEntry.arguments?.getInt(PARAM_RECIPE_ID) ?: return@composable
                     val recipe = getRecipeById(recipeId)?.toUiModel()
                     /*var isFavorite by rememberSaveable {
                         mutableStateOf(
