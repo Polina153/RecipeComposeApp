@@ -15,7 +15,7 @@ data class RecipeUiModel constructor(
     val ingredients: List<IngredientUiModel>,
     val method: List<String>,
     val isFavorite: Boolean,
-    var servings: Int
+    val servings: Int
 ) : Parcelable
 
 fun RecipeDto.toUiModel(): RecipeUiModel {
