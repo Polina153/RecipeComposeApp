@@ -14,28 +14,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.recipecomposeapp.core.ui.ScreenHeader
-import com.example.recipecomposeapp.features.recipes.ui.IngredientItem
+import com.example.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
 import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
+import com.example.recipecomposeapp.features.recipes.ui.IngredientItem
 import com.example.recipecomposeapp.ui.theme.Dimens.cornerMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.paddingMedium
 import com.example.recipecomposeapp.ui.theme.Dimens.sliderHeight
 import com.example.recipecomposeapp.ui.theme.DividerColor
 import com.example.recipecomposeapp.ui.theme.TextSecondaryColor
 import com.example.recipecomposeapp.ui.theme.recipesAppTypography
-import com.example.recipecomposeapp.util.FavoriteDataStoreManager
 import com.example.recipecomposeapp.util.shareRecipe
-import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -46,14 +42,12 @@ fun RecipeDetailsScreen(
 ) {
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    val viewModel: RecipeDetailsViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
-    var currentPortions by rememberSaveable { mutableIntStateOf(recipe.servings) }
-    val dataStoreManager = remember(context) { FavoriteDataStoreManager(context) }
-    val isFavorite by remember(recipe.id) {
-        dataStoreManager.isFavoriteFlow(recipe.id)
-    }.collectAsState(initial = false)
-
+    LaunchedEffect(recipe.id) {
+        viewModel.initializeWithRecipe(recipe)
+    }
 
     Column(
         modifier = modifier
@@ -61,23 +55,15 @@ fun RecipeDetailsScreen(
             .verticalScroll(rememberScrollState())
     ) {
         ScreenHeader(
-            rememberAsyncImagePainter(model = recipe.imageUrl),
-            "Изображение рецепта ${recipe.title}",
-            recipe.title,
+            rememberAsyncImagePainter(model = uiState.imageUrl),
+            "Изображение рецепта ${uiState.title}",
+            uiState.title,
             showShareButton = true,
-            onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
+            onShareClick = { shareRecipe(context, uiState.id, uiState.title) },
             showFavoriteButton = true,
-            isFavorite = isFavorite,
+            isFavorite = uiState.isFavorite,
             onFavoriteToggle = {
-                scope.launch {
-                    if (isFavorite) {
-                        dataStoreManager.removeFavorite(recipe.id)
-                    } else {
-                        dataStoreManager.addFavorite(recipe.id)
-                    }
-                    // UI обновится автоматически через Flow!
-                    // Больше не нужно вручную перезапрашивать состояние
-                }
+                viewModel.toggleFavorite()
             }
         )
         Text(
@@ -89,7 +75,7 @@ fun RecipeDetailsScreen(
                 .padding(paddingMedium)
         )
         Text(
-            text = "Порции: $currentPortions",
+            text = "Порции: ${uiState.currentPortions}",
             style = recipesAppTypography.titleSmall,
             color = TextSecondaryColor,
             modifier = Modifier
@@ -97,24 +83,15 @@ fun RecipeDetailsScreen(
                 .padding(paddingMedium)
         )
         PortionsSlider(
-            currentPortions = currentPortions,
-            onPortionsChange = { currentPortions = it }
+            currentPortions = uiState.currentPortions,
+            onPortionsChange = { viewModel.updatePortions(it) }
         )
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
-            // Пересчитываем ингредиенты только при изменении порций или списка
-            val scaledIngredients = remember(recipe.ingredients, currentPortions) {
-                val multiplier = currentPortions.toDouble() / recipe.servings
-                recipe.ingredients.map { ingredient ->
-                    ingredient.copy(
-                        amount = ingredient.amount?.let { it * multiplier }
-                    )
-                }
-            }
-            scaledIngredients.forEachIndexed { index, ingredient ->
+            uiState.scaledIngredients.forEachIndexed { index, ingredient ->
                 IngredientItem(
                     ingredient,
                     modifier = Modifier
@@ -123,7 +100,7 @@ fun RecipeDetailsScreen(
                             vertical = paddingMedium
                         )
                 )
-                if (index < scaledIngredients.lastIndex) {
+                if (index < uiState.scaledIngredients.lastIndex) {
                     HorizontalDivider(
                         thickness = sliderHeight,
                         color = DividerColor
@@ -146,7 +123,7 @@ fun RecipeDetailsScreen(
             shape = RoundedCornerShape(cornerMedium),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
-            recipe.method.forEachIndexed { index, method ->
+            uiState.method.forEachIndexed { index, method ->
                 Text(
                     "${index + 1}. $method",
                     modifier = Modifier
@@ -155,7 +132,7 @@ fun RecipeDetailsScreen(
                             vertical = paddingMedium
                         )
                 )
-                if (index < recipe.method.lastIndex) {
+                if (index < uiState.method.lastIndex) {
                     HorizontalDivider(
                         thickness = sliderHeight,
                         color = DividerColor
