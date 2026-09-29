@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
@@ -19,7 +18,6 @@ import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_ID
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_IMAGE_URL
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_TITLE
 import com.example.recipecomposeapp.Constants.PARAM_RECIPE_ID
-import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub
 import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Companion.getRecipeById
 import com.example.recipecomposeapp.features.categories.ui.CategoriesScreen
 import com.example.recipecomposeapp.features.details.ui.RecipeDetailsScreen
@@ -28,16 +26,12 @@ import com.example.recipecomposeapp.features.recipes.presentation.model.toUiMode
 import com.example.recipecomposeapp.features.recipes.ui.RecipesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
-import com.example.recipecomposeapp.util.FavoriteDataStoreManager
 
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
 
     val context = LocalContext.current
     val navController = rememberNavController()
-    val repository = remember { RecipesRepositoryStub() }
-    val manager = remember { FavoriteDataStoreManager(context) }
-
 
     // Обрабатываем deep link
     LaunchedEffect(deepLinkIntent) {
@@ -84,8 +78,6 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     Destination.Favorites.route
                 ) { backStackEntry ->
                     FavoritesScreen(
-                        repository = repository,
-                        manager = manager,
                         onRecipeClick = { recipeId ->
                             navController.navigate(Destination.Details.createRoute(recipeId))
                         }
@@ -120,11 +112,7 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 ) { backStackEntry ->
                     val recipeId = backStackEntry.arguments?.getInt(PARAM_RECIPE_ID) ?: return@composable
                     val recipe = getRecipeById(recipeId)?.toUiModel()
-                    /*var isFavorite by rememberSaveable {
-                        mutableStateOf(
-                            recipe?.isFavorite ?: false
-                        )
-                    }*/
+
                     recipe?.let {
                         RecipeDetailsScreen(
                             modifier = Modifier,
@@ -136,9 +124,3 @@ fun RecipesApp(deepLinkIntent: Intent?) {
         }
     }
 }
-
-/*@Composable
-@Preview(showBackground = true)
-fun RecipeAppPreview() {
-    RecipesApp()
-}*/
