@@ -7,22 +7,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.recipecomposeapp.Constants.KEY_RECIPE_OBJECT
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_ID
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_IMAGE_URL
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_TITLE
 import com.example.recipecomposeapp.Constants.PARAM_RECIPE_ID
-import com.example.recipecomposeapp.data.repository.RecipesRepositoryStub.Companion.getRecipeById
 import com.example.recipecomposeapp.features.categories.ui.CategoriesScreen
 import com.example.recipecomposeapp.features.details.ui.RecipeDetailsScreen
 import com.example.recipecomposeapp.features.favorites.ui.FavoritesScreen
-import com.example.recipecomposeapp.features.recipes.presentation.model.toUiModel
 import com.example.recipecomposeapp.features.recipes.ui.RecipesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
@@ -30,7 +28,6 @@ import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {
 
-    val context = LocalContext.current
     val navController = rememberNavController()
 
     // Обрабатываем deep link
@@ -95,7 +92,6 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                             type = NavType.StringType
                         })
                 ) { backStackEntry ->
-                    val selectedCategoryId = backStackEntry.arguments?.getInt(PARAM_CATEGORY_ID) ?: 0
 
                     RecipesScreen(
                         modifier = Modifier,
@@ -108,17 +104,17 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 }
                 composable(
                     Destination.Details.route,
-                    arguments = listOf(navArgument(PARAM_RECIPE_ID) { type = NavType.IntType })
+                    arguments = listOf(navArgument(PARAM_RECIPE_ID) { type = NavType.IntType }),
+                    deepLinks = listOf(navDeepLink {
+                        uriPattern = "recipeapp://recipe/{$PARAM_RECIPE_ID}"
+                    })
                 ) { backStackEntry ->
-                    val recipeId = backStackEntry.arguments?.getInt(PARAM_RECIPE_ID) ?: return@composable
-                    val recipe = getRecipeById(recipeId)?.toUiModel()
-
-                    recipe?.let {
-                        RecipeDetailsScreen(
-                            modifier = Modifier,
-                            recipe = it
-                        )
-                    }
+                    //val recipeId =
+                        //backStackEntry.arguments?.getInt(PARAM_RECIPE_ID) ?: return@composable
+                    //val recipe = getRecipeById(recipeId)?.toUiModel()
+                    RecipeDetailsScreen(
+                        modifier = Modifier,
+                    )
                 }
             }
         }
