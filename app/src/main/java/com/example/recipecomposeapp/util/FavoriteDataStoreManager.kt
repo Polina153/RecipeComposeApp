@@ -26,6 +26,14 @@ class FavoriteDataStoreManager(private val appContext: Context) {
         return getFavoriteIdsFlow().map { it.size }
     }
 
+    suspend fun toggleFavorite(recipeId: Int) {
+        val key = recipeId.toString()
+        appContext.dataStore.edit { preferences ->
+            val currentFavorites = preferences[PreferencesKeys.FAVORITE_RECIPE_IDS] ?: emptySet()
+            preferences[PreferencesKeys.FAVORITE_RECIPE_IDS] =
+                if (key in currentFavorites) currentFavorites - key else currentFavorites + key
+        }
+    }
 
     suspend fun isFavorite(recipeId: Int): Boolean {
         val preferences = appContext.dataStore.data.first()

@@ -21,14 +21,25 @@ class FavoritesViewModel(
 
     private val favoriteManager = FavoriteDataStoreManager(application)
 
-    val uiState: StateFlow<FavoritesUiState> =
+    val uiState: StateFlow<FavoritesUiState> = favoriteManager
+        .getFavoriteIdsFlow()
+        .map { favoriteIds -> loadFavoriteRecipes(favoriteIds) }
+        .retry(retries = 2) { cause -> cause is IOException }
+        .catch { exception -> emit(FavoritesUiState(error = exception.message)) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = FavoritesUiState(isLoading = true)
+        )
+
+    /*val uiState: StateFlow<FavoritesUiState> =
         favoriteManager.getFavoriteIdsFlow().map { idStrings -> loadFavoriteRecipes(idStrings) }
             .retry(retries = 2) { cause -> cause is IOException }
             .catch { exception -> emit(FavoritesUiState(error = exception.message)) }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = FavoritesUiState(isLoading = true)
-            )
+            )*/
 
     private fun loadFavoriteRecipes(ids: Set<String>): FavoritesUiState {
         if (ids.isEmpty()) { // Фикс бага: явно указываем isLoading = false для пустого списка
