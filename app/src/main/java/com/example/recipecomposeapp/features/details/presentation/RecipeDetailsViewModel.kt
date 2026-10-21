@@ -60,6 +60,25 @@ class RecipeDetailsViewModel(
         loadRecipe()
     }
 
+/*    fun initializeWithRecipe(recipe: RecipeUiModel) {
+        // Раскладываем рецепт по полям состояния
+        _baseState.update { state ->
+            state.copy(
+                id = recipe.id,
+                title = recipe.title,
+                imageUrl = recipe.imageUrl,
+                ingredients = recipe.ingredients,
+                method = recipe.method,
+                servings = recipe.servings,
+                currentPortions = recipe.servings,
+                isLoading = false,
+                error = null
+            )
+        }
+        // Устанавливаем ID для реактивной подписки на избранное
+        currentRecipeId.value = recipe.id
+    }*/
+
     fun loadRecipe() {
         viewModelScope.launch {
             _baseState.update {

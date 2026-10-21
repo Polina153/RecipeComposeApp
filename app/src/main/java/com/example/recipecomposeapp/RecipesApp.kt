@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.example.recipecomposeapp.Constants.KEY_RECIPE_OBJECT
+//import com.example.recipecomposeapp.Constants.KEY_RECIPE_OBJECT
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_ID
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_IMAGE_URL
 import com.example.recipecomposeapp.Constants.PARAM_CATEGORY_TITLE
@@ -57,7 +57,7 @@ fun RecipesApp(deepLinkIntent: Intent?) {
             ) {
                 composable(
                     Destination.Categories.route
-                ) { backStackEntry ->
+                ) {
                     CategoriesScreen(
                         onCategoryClick = { categoryId, categoryTitle, categoryImageUrl ->
                             navController.navigate(
@@ -73,7 +73,7 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                 }
                 composable(
                     Destination.Favorites.route
-                ) { backStackEntry ->
+                ) {
                     FavoritesScreen(
                         onRecipeClick = { recipeId ->
                             navController.navigate(Destination.Details.createRoute(recipeId))
@@ -91,13 +91,13 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                         navArgument(PARAM_CATEGORY_IMAGE_URL) {
                             type = NavType.StringType
                         })
-                ) { backStackEntry ->
+                ) {
 
                     RecipesScreen(
                         modifier = Modifier,
                         onRecipeClick = { recipeId, recipe ->
-                            navController.currentBackStackEntry?.savedStateHandle[KEY_RECIPE_OBJECT] =
-                                recipe
+                           // navController.currentBackStackEntry?.savedStateHandle[KEY_RECIPE_OBJECT] =
+                             //   recipe
                             navController.navigate(Destination.Details.createRoute(recipeId))
                         },
                     )
@@ -108,7 +108,7 @@ fun RecipesApp(deepLinkIntent: Intent?) {
                     deepLinks = listOf(navDeepLink {
                         uriPattern = "recipeapp://recipe/{$PARAM_RECIPE_ID}"
                     })
-                ) { backStackEntry ->
+                ) { //backStackEntry ->
                     //val recipeId =
                         //backStackEntry.arguments?.getInt(PARAM_RECIPE_ID) ?: return@composable
                     //val recipe = getRecipeById(recipeId)?.toUiModel()
