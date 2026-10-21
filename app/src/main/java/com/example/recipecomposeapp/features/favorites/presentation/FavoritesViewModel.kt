@@ -25,13 +25,11 @@ class FavoritesViewModel(
         .getFavoriteIdsFlow()
         .map { favoriteIds -> loadFavoriteRecipes(favoriteIds) }
         .retry(retries = 2) { cause -> cause is IOException }
-        .catch { exception -> emit(FavoritesUiState(error = exception.message)) }.stateIn(
+        .catch { exception -> emit(FavoritesUiState(error = exception.message)) }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = FavoritesUiState(isLoading = true)
-        )
-        .stateIn(
-            viewModelScope, SharingStarted.WhileSubscribed(5000), FavoritesUiState()
         )
 
     /*val uiState: StateFlow<FavoritesUiState> =
