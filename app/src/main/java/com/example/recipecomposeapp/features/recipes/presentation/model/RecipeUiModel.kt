@@ -3,6 +3,7 @@ package com.example.recipecomposeapp.features.recipes.presentation.model
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.example.recipecomposeapp.Constants
+import com.example.recipecomposeapp.Constants.DEFAULT_PORTIONS
 import com.example.recipecomposeapp.data.model.RecipeDto
 import kotlinx.parcelize.Parcelize
 
@@ -27,6 +28,6 @@ fun RecipeDto.toUiModel(): RecipeUiModel {
         imageUrl =
             if (imageUrl.startsWith("http")) imageUrl else Constants.ASSETS_URI_PREFIX + imageUrl,
         isFavorite = false,
-        servings = servings
+        servings = servings?.takeIf { it > 0 } ?: DEFAULT_PORTIONS
     )
 }
