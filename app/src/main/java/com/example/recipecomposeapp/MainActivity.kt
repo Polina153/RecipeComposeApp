@@ -19,6 +19,7 @@ import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
 
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
         .build()
 
     private var deepLinkIntent by mutableStateOf<Intent?>(null)
-    private val TAG = "Pool"
+    private val TAG = "Okhhtp"
     private val apiUrl = "https://recipes.aisprints.ru/api/category"
     private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
@@ -55,22 +56,20 @@ class MainActivity : ComponentActivity() {
             // 2. Передаём deepLinkIntent в RecipesApp
             RecipesApp(deepLinkIntent = deepLinkIntent)
         }
-        threadPool.execute {
+        thread {
             try {
                 Log.d(TAG, "Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
-                // Вызываем функцию запроса
                 val categories = fetchCategories(apiUrl)
 
-                // Здесь можно обновить UI через runOnUiThread или вернуться в Coroutine Dispatcher.Main
                 Log.d(TAG, "Успешно получено данных: ${categories.size} шт.")
                 val titles = categories.map { it.title }
                 Log.d(
                     TAG,
                     "Названия полученных категорий: $titles"
                 )
-                getRecipesInThreads(categories)
 
+                getRecipesInThreads(categories)
             } catch (e: Exception) {
                 Log.e(TAG, "Ошибка при выполнении запроса", e)
             }
@@ -80,7 +79,15 @@ class MainActivity : ComponentActivity() {
     private fun getRecipesInThreads(categories: List<CategoryDto>) {
         categories.forEach { categoryDto ->
             threadPool.execute {
-                fetchRecipe(categoryDto.id, categoryDto.title)
+                try {
+                    fetchRecipe(categoryDto.id, categoryDto.title)
+                } catch (e: Exception) {
+                    Log.e(
+                        TAG,
+                        "Ошибка при загрузке рецептов категории \"${categoryDto.title}\"",
+                        e
+                    )
+                }
             }
         }
     }
@@ -97,11 +104,9 @@ class MainActivity : ComponentActivity() {
         client.newCall(request).execute().use { response ->
 
             if (!response.isSuccessful) {
-                //showError("Проверьте интернет-соединение")
-                Log.e(TAG, "HTTP Error for Category $categoryId: ${response.code}")
                 throw HttpException(
                     response.code,
-                    "HTTP Error for Category $categoryId:: ${response.code}"
+                    "HTTP Error for Category $categoryId: ${response.code}"
                 )
             }
 
@@ -120,6 +125,7 @@ class MainActivity : ComponentActivity() {
                 TAG,
                 "Категория $categoryId: получено ${recipes.size} рецептов в потоке ${Thread.currentThread().name}"
             )
+
             if (recipes.isEmpty()) {
                 Log.w(TAG, "Категория $categoryId вернулась пустой")
             }
@@ -170,5 +176,6 @@ class MainActivity : ComponentActivity() {
         private val json = Json { ignoreUnknownKeys = true }
     }
 }
+
 
 class HttpException(val code: Int, message: String) : Exception(message)
