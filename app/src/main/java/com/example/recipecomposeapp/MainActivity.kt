@@ -9,41 +9,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.lifecycleScope
+import com.example.recipecomposeapp.core.network.RecipesNetwork
+import com.example.recipecomposeapp.core.network.TAG
 import com.example.recipecomposeapp.data.model.CategoryDto
 import com.example.recipecomposeapp.data.model.RecipeDto
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.logging.HttpLoggingInterceptor
-import java.io.IOException
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private val client = OkHttpClient.Builder()
-        // Добавляем интерцептор только если сборка отладочная
-        .apply {
-            if (BuildConfig.DEBUG) {
-                addInterceptor(HttpLoggingInterceptor { Log.d(TAG, "$it") }.apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-            }
-        }
-        .readTimeout(15, TimeUnit.SECONDS)
-        .connectTimeout(
-            10,
-            TimeUnit.SECONDS
-        ) // Добавляем callTimeout для ограничения всего запроса целиком
-        .callTimeout(60, TimeUnit.SECONDS)
-        .build()
-
     private var deepLinkIntent by mutableStateOf<Intent?>(null)
-    private val TAG = "Okhhtp"
-    private val apiUrl = "https://recipes.aisprints.ru/api/category"
-    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,14 +32,13 @@ class MainActivity : ComponentActivity() {
 
         Log.d(TAG, "Метод onCreate() выполняется на потоке: ${Thread.currentThread().name}")
         setContent {
-            // 2. Передаём deepLinkIntent в RecipesApp
             RecipesApp(deepLinkIntent = deepLinkIntent)
         }
-        thread {
+        lifecycleScope.launch {
             try {
                 Log.d(TAG, "Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
-                val categories = fetchCategories(apiUrl)
+                val categories = fetchCategories()
 
                 Log.d(TAG, "Успешно получено данных: ${categories.size} шт.")
                 val titles = categories.map { it.title }
@@ -68,114 +46,76 @@ class MainActivity : ComponentActivity() {
                     TAG,
                     "Названия полученных категорий: $titles"
                 )
+                val recipes = loadRecipesInParallel(categories)
 
-                getRecipesInThreads(categories)
+                Log.d(
+                    TAG,
+                    "Параллельная загрузка завершена. " +
+                            "Всего получено рецептов: ${recipes.size}"
+                )
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Ошибка при выполнении запроса", e)
             }
         }
     }
 
-    private fun getRecipesInThreads(categories: List<CategoryDto>) {
-        categories.forEach { categoryDto ->
-            threadPool.execute {
+    private suspend fun loadRecipesInParallel(
+        categories: List<CategoryDto>
+    ): List<RecipeDto> = coroutineScope {
+        val deferredRecipes = categories.map { category ->
+            async {
                 try {
-                    fetchRecipe(categoryDto.id, categoryDto.title)
+                    fetchRecipe(category.id)
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (e: Exception) {
                     Log.e(
                         TAG,
-                        "Ошибка при загрузке рецептов категории \"${categoryDto.title}\"",
+                        "Ошибка при загрузке рецептов категории \"${category.title}\"",
                         e
                     )
+                    emptyList()
                 }
             }
         }
+
+        deferredRecipes.awaitAll().flatten()
     }
 
-    private fun fetchRecipe(categoryId: Int, categoryTitle: String) {
+    private suspend fun fetchRecipe(categoryId: Int): List<RecipeDto> {
+        Log.d(
+            TAG,
+            "Выполняю запрос рецептов категории $categoryId " +
+                    "на потоке: ${Thread.currentThread().name}"
+        )
 
-        val request = Request.Builder()
-            .url("${apiUrl}/$categoryId/recipes")
-            .get()
-            .build()
+        val recipes = RecipesNetwork.apiService.getRecipesByCategory(categoryId)
 
-        Log.d(TAG, "Выполняю запрос рецепта на потоке: ${Thread.currentThread().name}")
+        Log.d(
+            TAG,
+            "Категория $categoryId: получено ${recipes.size} рецептов " +
+                    "на потоке: ${Thread.currentThread().name}"
+        )
 
-        client.newCall(request).execute().use { response ->
-
-            if (!response.isSuccessful) {
-                throw HttpException(
-                    response.code,
-                    "HTTP Error for Category $categoryId: ${response.code}"
-                )
-            }
-
-            val responseString = response.body?.string()
-                ?: throw IOException("Body is null for recipe $categoryId")
-
-            Log.d(
-                TAG,
-                "Тело responseText Recipes ($categoryId): ${responseString.length}."
-            )
-
-            val recipes =
-                json.decodeFromString<List<RecipeDto>>(responseString)
-
-            Log.d(
-                TAG,
-                "Категория $categoryId: получено ${recipes.size} рецептов в потоке ${Thread.currentThread().name}"
-            )
-
-            if (recipes.isEmpty()) {
-                Log.w(TAG, "Категория $categoryId вернулась пустой")
-            }
-        }
+        return recipes
     }
 
-    /**
-     * Функция выполнения HTTP-запроса.
-     * Возвращает список объектов DTO.
-     */
-    private fun fetchCategories(urlString: String): List<CategoryDto> {
 
-        val request = Request.Builder()
-            .url(urlString)
-            .get()
-            .build()
+    private suspend fun fetchCategories(): List<CategoryDto> {
+        val categories = RecipesNetwork.apiService.getCategories()
 
-        client.newCall(request).execute().use { response ->
+        Log.d(
+            TAG,
+            "Категории загружены на потоке: ${Thread.currentThread().name}"
+        )
 
-            if (!response.isSuccessful) {
-                //showError("Сервер временно недоступен, попробуйте позже")
-                throw HttpException(response.code, "HTTP Error: ${response.code}")
-            }
-
-            // Безопасное чтение тела. use{} закроет поток автоматически.
-            val jsonString =
-                response.body?.string() ?: throw IOException("Response body is null")
-
-            Log.d(TAG, "Тело responseText Categories: ${jsonString.length}.")
-
-            // Десериализация JSON -> Kotlin Objects
-            return json.decodeFromString<List<CategoryDto>>(jsonString)
-        }
+        return categories
     }
 
-    // 3. Обрабатываем warm start (когда Activity уже запущена, но к ней пришёл новый Intent)
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         deepLinkIntent = intent
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        threadPool.shutdown()
-    }
-
-    companion object {
-        private val json = Json { ignoreUnknownKeys = true }
-    }
 }
-
-
-class HttpException(val code: Int, message: String) : Exception(message)
